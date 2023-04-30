@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "legolibbase",
+  "version": "${version}",
+
+  "name": "LegoLib: Base",
+  "description": "Enhancing the FabricMC Experience",
+  "authors": [
+    "MCLegoMan"
+  ],
+  "contact": {
+    "homepage": "https://legolib-fabric.mclegoman.com",
+    "sources": "https://github.com/LegoLib-Fabric/LegoLibBase"
+  },
+
+  "license": "CC-BY 4.0",
+  "icon": "assets/legolib/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.mclegoman.legolibbase.main.LegoLibBase"
+    ],
+    "client": [
+      "com.mclegoman.legolibbase.client.LegoLibBaseClient"
+    ]
+  },
+  "mixins": [
+    "legolibbase.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": "~1.19.4",
+    "java": ">=17"
+  }
+}
