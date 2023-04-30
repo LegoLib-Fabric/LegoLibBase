@@ -1,4 +1,4 @@
-package com.mclegoman.legolibbase.main.util.development_type;
+package com.mclegoman.legolib.main.util.development_type;
 
 public enum LegoLibBaseDevelopmentType {
     ALPHA,

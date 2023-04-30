@@ -1,4 +1,4 @@
-package com.mclegoman.legolibbase.main.util.code_type;
+package com.mclegoman.legolib.main.util.code_type;
 
 public enum LegoLibBaseCodeType {
     SHORT_CODE,

@@ -1,4 +1,4 @@
-package com.mclegoman.legolibbase.main.util.logger;
+package com.mclegoman.legolib.main.util.logger;
 
 public enum LegoLibBaseLoggerType {
     INFO,

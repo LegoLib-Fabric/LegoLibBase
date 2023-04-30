@@ -1,6 +1,6 @@
-package com.mclegoman.legolibbase.main.util.logger;
+package com.mclegoman.legolib.main.util.logger;
 
-import com.mclegoman.legolibbase.main.data.LegoLibBaseData;
+import com.mclegoman.legolib.main.data.LegoLibBaseData;
 
 public class LegoLibBaseLoggerHelper {
     public static void sendLog(LegoLibBaseLoggerType loggerType, String log) {

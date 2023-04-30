@@ -1,8 +1,8 @@
-package com.mclegoman.legolibbase.main.data;
+package com.mclegoman.legolib.main.data;
 
-import com.mclegoman.legolibbase.main.util.code_type.LegoLibBaseCodeType;
-import com.mclegoman.legolibbase.main.util.development_type.LegoLibBaseDevelopmentType;
-import com.mclegoman.legolibbase.main.util.development_type.LegoLibBaseDevelopmentTypeHelper;
+import com.mclegoman.legolib.main.util.code_type.LegoLibBaseCodeType;
+import com.mclegoman.legolib.main.util.development_type.LegoLibBaseDevelopmentType;
+import com.mclegoman.legolib.main.util.development_type.LegoLibBaseDevelopmentTypeHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.text.Text;
@@ -31,7 +31,7 @@ public class LegoLibBaseData {
         ID = "legolibbase";
         VERSION = "1.0.0";
         DEVELOPMENT_TYPE = LegoLibBaseDevelopmentType.ALPHA;
-        BUILD = 1;
+        BUILD = 2;
         VERSION_ID = VERSION + "-" + LegoLibBaseDevelopmentTypeHelper.getDevelopmentTypeString(DEVELOPMENT_TYPE, LegoLibBaseCodeType.SHORT_CODE) + "." + BUILD;
         PREFIX = "[" + NAME + " " + VERSION_ID + "] ";
         LOGGER = LoggerFactory.getLogger(ID);

@@ -1,4 +1,4 @@
-package com.mclegoman.legolibbase.main.util.compatibility;
+package com.mclegoman.legolib.main.util.compatibility;
 
 import net.fabricmc.loader.api.FabricLoader;
 

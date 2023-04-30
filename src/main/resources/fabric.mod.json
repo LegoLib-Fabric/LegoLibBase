@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.mclegoman.legolibbase.main.LegoLibBase"
+      "com.mclegoman.legolib.main.LegoLibBase"
     ],
     "client": [
-      "com.mclegoman.legolibbase.client.LegoLibBaseClient"
+      "com.mclegoman.legolib.client.LegoLibBaseClient"
     ]
   },
   "mixins": [

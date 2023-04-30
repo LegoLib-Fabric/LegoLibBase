@@ -1,6 +1,6 @@
-package com.mclegoman.legolibbase.main.util.development_type;
+package com.mclegoman.legolib.main.util.development_type;
 
-import com.mclegoman.legolibbase.main.util.code_type.LegoLibBaseCodeType;
+import com.mclegoman.legolib.main.util.code_type.LegoLibBaseCodeType;
 import net.minecraft.text.Text;
 
 public class LegoLibBaseDevelopmentTypeHelper {
