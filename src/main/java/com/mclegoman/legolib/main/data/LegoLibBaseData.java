@@ -31,7 +31,7 @@ public class LegoLibBaseData {
         ID = "legolibbase";
         VERSION = "1.0.0";
         DEVELOPMENT_TYPE = LegoLibBaseDevelopmentType.ALPHA;
-        BUILD = 2;
+        BUILD = 3;
         VERSION_ID = VERSION + "-" + LegoLibBaseDevelopmentTypeHelper.getDevelopmentTypeString(DEVELOPMENT_TYPE, LegoLibBaseCodeType.SHORT_CODE) + "." + BUILD;
         PREFIX = "[" + NAME + " " + VERSION_ID + "] ";
         LOGGER = LoggerFactory.getLogger(ID);
