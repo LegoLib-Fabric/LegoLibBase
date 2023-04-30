@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LegoLibBaseData {
+    public static final String LEGOLIB;
+    public static final Text LEGOLIB_TEXT;
     public static final String NAME;
     public static final Text NAME_TEXT;
     public static final String ID;
@@ -22,8 +24,10 @@ public class LegoLibBaseData {
     public static final ModContainer CONTAINER;
 
     static {
-        NAME = "LegoLib: Base";
-        NAME_TEXT = Text.translatable("legolib.base.name");
+        LEGOLIB = "LegoLib";
+        LEGOLIB_TEXT = Text.translatable("legolib.name");
+        NAME = LEGOLIB + ": Base";
+        NAME_TEXT = Text.translatable("legolib.base.name", LEGOLIB_TEXT);
         ID = "legolibbase";
         VERSION = "1.0.0";
         DEVELOPMENT_TYPE = LegoLibBaseDevelopmentType.ALPHA;

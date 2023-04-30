@@ -1,5 +1,6 @@
 {
-  "legolib.base.name": "LegoLib: Base",
+  "legolib.name": "LegoLib",
+  "legolib.base.name": "%s: Base",
 
   "legolib.base.development_type.alpha.short_code": "alpha",
   "legolib.base.development_type.beta.short_code": "beta",
