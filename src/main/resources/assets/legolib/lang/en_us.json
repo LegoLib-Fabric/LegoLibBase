@@ -1,0 +1,20 @@
+{
+  "legolib.base.name": "LegoLib: Base",
+
+  "legolib.base.development_type.alpha.short_code": "alpha",
+  "legolib.base.development_type.beta.short_code": "beta",
+  "legolib.base.development_type.release_candidate.short_code": "rc",
+  "legolib.base.development_type.release.short_code": "release",
+
+  "legolib.base.development_type.alpha.long_code": "Alpha",
+  "legolib.base.development_type.beta.long_code": "Beta",
+  "legolib.base.development_type.release_candidate.long_code": "Release Candidate",
+  "legolib.base.development_type.release.long_code": "Release",
+
+  "legolib.base.development_type.alpha.sentenced_long_code": "an Alpha",
+  "legolib.base.development_type.beta.sentenced_long_code": "a Beta",
+  "legolib.base.development_type.release_candidate.sentenced_long_code": "a Release Candidate",
+  "legolib.base.development_type.release.sentenced_long_code": "a Release",
+
+  "legolib.base.development_type.unknown": "UNKNOWN"
+}
