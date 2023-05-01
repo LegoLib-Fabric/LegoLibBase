@@ -1,9 +1,13 @@
 package com.mclegoman.legolib.main.util.registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.DecoratedPotPatterns;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
@@ -17,8 +21,10 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.passive.CatVariant;
 import net.minecraft.entity.passive.FrogVariant;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Instrument;
 import net.minecraft.item.Item;
+import net.minecraft.item.SignItem;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.entry.LootPoolEntryType;
 import net.minecraft.loot.function.LootFunctionType;
@@ -32,7 +38,9 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.StatType;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.pool.StructurePoolElementType;
@@ -66,23 +74,26 @@ import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraft.world.gen.trunk.TrunkPlacerType;
 import net.minecraft.world.poi.PointOfInterestType;
 
+import java.util.ArrayList;
+
 public class LegoLibBaseRegistryHelper {
     public static Object register(Registry REGISTRY, Identifier ID, Object ENTRY) {
         return Registry.register(REGISTRY, ID, ENTRY);
     }
-    public static void register(String NAMESPACE, String ID, GameEvent GAME_EVENT) {
-        register(Registries.GAME_EVENT, new Identifier(NAMESPACE, ID), GAME_EVENT);
+    public static GameEvent register(String NAMESPACE, String ID, GameEvent GAME_EVENT) {
+        return (GameEvent)register(Registries.GAME_EVENT, new Identifier(NAMESPACE, ID), GAME_EVENT);
     }
-    public static void register(String NAMESPACE, String ID, SoundEvent SOUND_EVENT) {
-        register(Registries.GAME_EVENT, new Identifier(NAMESPACE, ID), SOUND_EVENT);
+    public static SoundEvent register(String NAMESPACE, String ID, SoundEvent SOUND_EVENT) {
+        return (SoundEvent)register(Registries.SOUND_EVENT, new Identifier(NAMESPACE, ID), SOUND_EVENT);
     }
-    public static void register(String NAMESPACE, String ID, Fluid FLUID) {
-        register(Registries.FLUID, new Identifier(NAMESPACE, ID), FLUID);
+    public static Fluid register(String NAMESPACE, String ID, Fluid FLUID) {
+        return (Fluid)register(Registries.FLUID, new Identifier(NAMESPACE, ID), FLUID);
     }
-    public static void register(String NAMESPACE, String ID, StatusEffect STATUS_EFFECT) {
-        register(Registries.STATUS_EFFECT, new Identifier(NAMESPACE, ID), STATUS_EFFECT);
+    public static StatusEffect register(String NAMESPACE, String ID, StatusEffect STATUS_EFFECT) {
+        return (StatusEffect)register(Registries.STATUS_EFFECT, new Identifier(NAMESPACE, ID), STATUS_EFFECT);
     }
-    public static Block register(String NAMESPACE, String ID, Block BLOCK) {
+    public static Block register(String NAMESPACE, String ID, Block BLOCK, boolean BLOCK_ITEM) {
+        if (BLOCK_ITEM) register(NAMESPACE, ID, new BlockItem(BLOCK, new FabricItemSettings()));
         return (Block)register(Registries.BLOCK, new Identifier(NAMESPACE, ID), BLOCK);
     }
     public static Enchantment register(String NAMESPACE, String ID, Enchantment ENCHANTMENT) {
@@ -264,5 +275,102 @@ public class LegoLibBaseRegistryHelper {
     }
     public static Registry register(String NAMESPACE, String ID, Registry REGISTRIES) {
         return (Registry)register(Registries.REGISTRIES, new Identifier(NAMESPACE, ID), REGISTRIES);
+    }
+    public static BlockSetType register(String ID, BlockSoundGroup BLOCK_SOUND_GROUP, SoundEvent DOOR_CLOSE, SoundEvent DOOR_OPEN, SoundEvent TRAPDOOR_CLOSE, SoundEvent TRAPDOOR_OPEN, SoundEvent PRESSURE_PLATE_OFF, SoundEvent PRESSURE_PLATE_ON, SoundEvent BUTTON_OFF, SoundEvent BUTTON_ON) {
+        return BlockSetType.register(new BlockSetType(ID, BLOCK_SOUND_GROUP, DOOR_CLOSE, DOOR_OPEN, TRAPDOOR_CLOSE, TRAPDOOR_OPEN, PRESSURE_PLATE_OFF, PRESSURE_PLATE_ON, BUTTON_OFF, BUTTON_ON));
+    }
+    public static WoodType register(String ID, BlockSetType BLOCK_SET_TYPE) {
+        return new WoodType(ID, BLOCK_SET_TYPE);
+    }
+    public static ArrayList<Block> register(String NAMESPACE, SaplingGenerator SAPLING_GENERATOR, boolean POTTABLE_SAPLING, WoodType WOOD_TYPE, boolean FLAMMABLE) {
+        FlammableBlockRegistry FLAMMABLE_BLOCK_REGISTRY = FlammableBlockRegistry.getDefaultInstance();
+        ArrayList<Block> BLOCKS = new ArrayList<>();
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_log"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_wood"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, ("stripped_" + WOOD_TYPE.name() + "_log"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, ("stripped_" + WOOD_TYPE.name() + "_wood"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_planks"), new Block(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_stairs"), new StairsBlock(BLOCKS.get(4).getDefaultState(), FabricBlockSettings.copy(BLOCKS.get(4))),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_slab"), new SlabBlock(FabricBlockSettings.copy(BLOCKS.get(4))),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_fence"), new FenceBlock(FabricBlockSettings.copy(BLOCKS.get(4))),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_fence_gate"), new FenceGateBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType()), WOOD_TYPE),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_door"), new DoorBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque().sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType()),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_trapdoor"), new TrapdoorBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque().sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType()),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_pressure_plate"), new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, FabricBlockSettings.of(Material.WOOD).noCollision().strength(0.5F).sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType()),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_button"), new ButtonBlock(FabricBlockSettings.of(Material.DECORATION).noCollision().strength(0.5F).sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType(), 30, true),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_leaves"), new LeavesBlock(FabricBlockSettings.copy(Blocks.OAK_LEAVES)),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_sapling"), new SaplingBlock(SAPLING_GENERATOR, FabricBlockSettings.of(Material.PLANT).noCollision().nonOpaque().breakInstantly().sounds(WOOD_TYPE.soundType())),true));
+        if (POTTABLE_SAPLING) BLOCKS.add((Block)register(NAMESPACE, ("potted" + WOOD_TYPE.name() + "_sapling"), new FlowerPotBlock(BLOCKS.get(14), FabricBlockSettings.copy(Blocks.POTTED_OAK_SAPLING).nonOpaque()),true));
+        // Signs aren't loading models //  BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_sign"), new SignBlock(FabricBlockSettings.of(Material.WOOD).noCollision().strength(1.0F), WOOD_TYPE),true));
+        // Signs aren't loading models //  BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_wall_sign"), new SignBlock(FabricBlockSettings.of(Material.WOOD).noCollision().strength(1.0F), WOOD_TYPE),true));
+        // Signs aren't loading models //  BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_hanging_sign"), new HangingSignBlock(FabricBlockSettings.of(Material.WOOD).noCollision().strength(1.0F), WOOD_TYPE),true));
+        if (FLAMMABLE) {
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(0), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(1), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(2), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(3), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(4), 10, 40);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(5), 10, 40);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(6), 10, 40);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(7), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(8), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(9), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(10), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(11), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(12), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(13), 60, 120);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(14), 60, 120);
+        }
+        StrippableBlockRegistry.register(BLOCKS.get(0), BLOCKS.get(2));
+        StrippableBlockRegistry.register(BLOCKS.get(1), BLOCKS.get(3));
+        return BLOCKS;
+    }
+    public static ArrayList<Block> register(String NAMESPACE, Block SAPLING_BLOCK, boolean POTTABLE_SAPLING, WoodType WOOD_TYPE, boolean FLAMMABLE) {
+        FlammableBlockRegistry FLAMMABLE_BLOCK_REGISTRY = FlammableBlockRegistry.getDefaultInstance();
+        ArrayList<Block> BLOCKS = new ArrayList<>();
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_log"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_wood"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, ("stripped_" + WOOD_TYPE.name() + "_log"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, ("stripped_" + WOOD_TYPE.name() + "_wood"), new PillarBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_planks"), new Block(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType())),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_stairs"), new StairsBlock(BLOCKS.get(4).getDefaultState(), FabricBlockSettings.copy(BLOCKS.get(4))),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_slab"), new SlabBlock(FabricBlockSettings.copy(BLOCKS.get(4))),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_fence"), new FenceBlock(FabricBlockSettings.copy(BLOCKS.get(4))),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_fence_gate"), new FenceGateBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0F, 3.0F).sounds(WOOD_TYPE.soundType()), WOOD_TYPE),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_door"), new DoorBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque().sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType()),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_trapdoor"), new TrapdoorBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque().sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType()),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_pressure_plate"), new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, FabricBlockSettings.of(Material.WOOD).noCollision().strength(0.5F).sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType()),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_button"), new ButtonBlock(FabricBlockSettings.of(Material.DECORATION).noCollision().strength(0.5F).sounds(WOOD_TYPE.soundType()), WOOD_TYPE.setType(), 30, true),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_leaves"), new LeavesBlock(FabricBlockSettings.copy(Blocks.OAK_LEAVES)),true));
+        BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_sapling"), SAPLING_BLOCK,true));
+        if (POTTABLE_SAPLING) BLOCKS.add((Block)register(NAMESPACE, ("potted" + WOOD_TYPE.name() + "_sapling"), new FlowerPotBlock(BLOCKS.get(14), FabricBlockSettings.copy(Blocks.POTTED_OAK_SAPLING).nonOpaque()),true));
+        // Signs aren't loading models //  BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_sign"), new SignBlock(FabricBlockSettings.of(Material.WOOD).noCollision().strength(1.0F), WOOD_TYPE),true));
+        // Signs aren't loading models //  BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_wall_sign"), new SignBlock(FabricBlockSettings.of(Material.WOOD).noCollision().strength(1.0F), WOOD_TYPE),true));
+        // Signs aren't loading models //  BLOCKS.add((Block)register(NAMESPACE, (WOOD_TYPE.name() + "_hanging_sign"), new HangingSignBlock(FabricBlockSettings.of(Material.WOOD).noCollision().strength(1.0F), WOOD_TYPE),true));
+        if (FLAMMABLE) {
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(0), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(1), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(2), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(3), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(4), 10, 40);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(5), 10, 40);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(6), 10, 40);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(7), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(8), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(9), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(10), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(11), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(12), 10, 10);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(13), 60, 120);
+            FLAMMABLE_BLOCK_REGISTRY.add(BLOCKS.get(14), 60, 120);
+        }
+        StrippableBlockRegistry.register(BLOCKS.get(0), BLOCKS.get(2));
+        StrippableBlockRegistry.register(BLOCKS.get(1), BLOCKS.get(3));
+        return BLOCKS;
+    }
+    public static ArrayList<Item> register(String NAMESPACE, WoodType WOOD_TYPE, ArrayList<Block> BLOCKS) {
+        ArrayList<Item> ITEMS = new ArrayList<>();
+        // Signs aren't loading models //  ITEMS.add((Item)register(NAMESPACE, (WOOD_TYPE.name() + "_sign"), new SignItem(new FabricItemSettings().maxCount(16), BLOCKS.get(16), BLOCKS.get(17))));
+        return ITEMS;
     }
 }
